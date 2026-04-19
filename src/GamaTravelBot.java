@@ -1,56 +1,58 @@
+import java.util.ArrayList; // Importante para a lista
 import java.util.Scanner;
 
 public class GamaTravelBot {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        // Lista que guarda todos os leads que interagirem com o bot
+        ArrayList<Lead> listaDeLeads = new ArrayList<>();
+        EbookProduct ebookTibet = new EbookProduct("Roteiro Secreto: Tibet", 47.00);
+
         int opcao = 0;
 
-        System.out.println("--- Bem-vindo à GamaTravel! ---");
-
-        while (opcao != 4) { // Loop do menu
-            System.out.println("\nPrepare as malas! Como posso ajudar?");
-            System.out.println("1. Explorar Destinos (E-book Tibet)");
-            System.out.println("2. Agendar Consultoria");
-            System.out.println("3. Suporte");
+        while (opcao != 4) {
+            System.out.println("\n--- GAMA TRAVEL SISTEMA ---");
+            System.out.println("1. Comprar E-book (Vendas)");
+            System.out.println("2. Agendar Consultoria (Leads)");
+            System.out.println("3. Relatório de Leads (Admin)");
             System.out.println("4. Sair");
+            System.out.print("Escolha: ");
 
-            System.out.print("\nEscolha uma opção: ");
+            opcao = scanner.nextInt();
+            scanner.nextLine(); // Limpa o buffer
 
-            if (scanner.hasNextInt()) {
-                opcao = scanner.nextInt();
+            switch (opcao) {
+                case 1:
+                    ebookTibet.exibirOferta();
+                    System.out.print("Deseja receber o link de pagamento? (sim/nao): ");
+                    String resposta = scanner.nextLine();
+                    if(resposta.equalsIgnoreCase("sim")) {
+                        System.out.println(">> Enviando link para o WhatsApp...");
+                    }
+                    break;
 
-                switch (opcao) {
-                    case 1:
-                        System.out.println(">> Enviando link do E-book: Roteiro Secreto: Tibet!");
-                        break;
-                    // ... dentro do switch(opcao) ...
+                case 2:
+                    System.out.print("Nome: ");
+                    String nome = scanner.nextLine();
+                    System.out.print("Destino: ");
+                    String destino = scanner.nextLine();
 
-                    case 2:
-                        System.out.println("\n>> Iniciando agendamento da GamaTravel...");
+                    Lead novoLead = new Lead(nome, destino);
+                    listaDeLeads.add(novoLead); // SALVANDO NA LISTA
+                    System.out.println("✅ Agendamento pré-configurado!");
+                    break;
 
-                        // Limpar o buffer do teclado (importante em Java após usar nextInt)
-                        scanner.nextLine();
-
-                        System.out.print("Qual o seu nome completo? ");
-                        String nomeCliente = scanner.nextLine();
-
-                        System.out.print("Para qual destino você deseja orçar? ");
-                        String destinoCliente = scanner.nextLine();
-
-                        // MÁGICA: Criando o objeto Lead com os dados reais!
-                        Lead novoLead = new Lead(nomeCliente, destinoCliente);
-
-                        System.out.println("\nPerfeito, " + nomeCliente + "! Seus dados foram pré-cadastrados.");
-                        novoLead.exibirDetalhes();
-                        break;
-                    default:
-                        System.out.println("Ops! Opção inválida. Escolha 1, 2 ou 3 (Opção A selecionada).");
-                }
-            } else {
-                System.out.println("Por favor, digite apenas números.");
-                scanner.next(); // Limpa a entrada inválida
+                case 3:
+                    System.out.println("\n=== RELATÓRIO DE LEADS PARA AGÊNCIA ===");
+                    if(listaDeLeads.isEmpty()) {
+                        System.out.println("Nenhum lead cadastrado ainda.");
+                    } else {
+                        for(Lead l : listaDeLeads) { // Loop que percorre a lista
+                            l.exibirDetalhes();
+                        }
+                    }
+                    break;
             }
         }
-        scanner.close();
     }
 }
