@@ -23,15 +23,25 @@ public class GamaTravelBot {
                     case 1:
                         System.out.println(">> Enviando link do E-book: Roteiro Secreto: Tibet!");
                         break;
+                    // ... dentro do switch(opcao) ...
+
                     case 2:
-                        System.out.println(">> Iniciando coleta de dados para agendamento...");
-                        // Aqui você poderia chamar um método para salvar no MongoDB futuramente
-                        break;
-                    case 3:
-                        System.out.println(">> Nossos consultores estão em Goiânia. Aguarde um momento.");
-                        break;
-                    case 4:
-                        System.out.println("Boa viagem! Até logo.");
+                        System.out.println("\n>> Iniciando agendamento da GamaTravel...");
+
+                        // Limpar o buffer do teclado (importante em Java após usar nextInt)
+                        scanner.nextLine();
+
+                        System.out.print("Qual o seu nome completo? ");
+                        String nomeCliente = scanner.nextLine();
+
+                        System.out.print("Para qual destino você deseja orçar? ");
+                        String destinoCliente = scanner.nextLine();
+
+                        // MÁGICA: Criando o objeto Lead com os dados reais!
+                        Lead novoLead = new Lead(nomeCliente, destinoCliente);
+
+                        System.out.println("\nPerfeito, " + nomeCliente + "! Seus dados foram pré-cadastrados.");
+                        novoLead.exibirDetalhes();
                         break;
                     default:
                         System.out.println("Ops! Opção inválida. Escolha 1, 2 ou 3 (Opção A selecionada).");
