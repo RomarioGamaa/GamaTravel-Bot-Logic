@@ -32,13 +32,26 @@ public class GamaTravelBot {
                     break;
 
                 case 2:
-                    System.out.print("Nome: ");
-                    String nome = scanner.nextLine();
-                    System.out.print("Destino: ");
+                    System.out.println("\n>> Iniciando agendamento da GamaTravel...");
+                    scanner.nextLine(); // Limpa o buffer
+
+                    String nome = "";
+                    // Loop de validação: enquanto o nome estiver vazio, ele não sai daqui
+                    while (nome.trim().isEmpty()) {
+                        System.out.print("Qual o seu nome completo? ");
+                        nome = scanner.nextLine();
+                        if (nome.trim().isEmpty()) {
+                            System.out.println("⚠️ Erro: O nome não pode ficar em branco. Por favor, digite seu nome.");
+                        }
+                    }
+
+                    System.out.print("Para qual destino você deseja orçar? ");
                     String destino = scanner.nextLine();
+                    // Se o destino for vazio, definimos um padrão
+                    if (destino.trim().isEmpty()) { destino = "Destino não informado"; }
 
                     Lead novoLead = new Lead(nome, destino);
-                    listaDeLeads.add(novoLead); // SALVANDO NA LISTA
+                    listaDeLeads.add(novoLead);
                     System.out.println("✅ Agendamento pré-configurado!");
                     break;
 
