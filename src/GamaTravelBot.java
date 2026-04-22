@@ -8,14 +8,15 @@ import org.bson.Document;
 
 public class GamaTravelBot {
     public static void main(String[] args) {
-        // 1. Sua URL de conexão com o MongoDB Atlas
-        String uri =   "mongodb://gama_dev_99:QnKCdnGwc3v7RVw@ac-nolkvzz-shard-00-00.gq1jdko.mongodb.net:27017,ac-nolkvzz-shard-00-01.gq1jdko.mongodb.net:27017,ac-nolkvzz-shard-00-02.gq1jdko.mongodb.net:27017/?ssl=true&replicaSet=atlas-11rwm0-shard-0&authSource=admin&appName=Cluster0";
-        try (MongoClient mongoClient = MongoClients.create(uri)) {
+        // 1. O Java busca o link seguro que você acabou de salvar no IntelliJ
+        String uri = System.getenv("MONGODB_URI");
 
+        // 2. Conectar usando essa variável
+        try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("GamaTravelDB");
             MongoCollection<Document> collection = database.getCollection("leads");
 
-            System.out.println("✅ [SISTEMA] Conectado ao MongoDB Atlas com sucesso!");
+            System.out.println("✅ [SISTEMA] Conectado com segurança via Variável de Ambiente!");
 
             // --- INÍCIO DA LÓGICA DO BOT ---
             Scanner scanner = new Scanner(System.in);
@@ -69,7 +70,7 @@ public class GamaTravelBot {
                         Lead novoLead = new Lead(nome, destino);
                         listaDeLeads.add(novoLead);
 
-                        // --- MÁGICA: ENVIANDO PARA O MONGODB ---
+                        // ---ENVIANDO PARA O MONGODB ---
                         Document docLead = new Document("nome", nome)
                                 .append("destino", destino)
                                 .append("data_cadastro", new java.util.Date());
