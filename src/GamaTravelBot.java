@@ -8,7 +8,7 @@ import org.bson.Document;
 
 public class GamaTravelBot {
     public static void main(String[] args) {
-        // 1. O Java busca o link seguro que você acabou de salvar no IntelliJ
+        // 1. O Java busca o link seguro que foi salvo no IntelliJ
         String uri = System.getenv("MONGODB_URI");
 
         // 2. Conectar usando essa variável
