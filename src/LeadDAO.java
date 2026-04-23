@@ -5,10 +5,47 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import java.util.ArrayList;
 import java.util.List;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class LeadDAO {private MongoCollection<Document> collection;
 
-    // Construtor: Ele faz a conexão quando você cria o objeto LeadDAO
+    public void deletarPorNome(String nome) {
+        // Cria um filtro para achar o documento com o nome exato
+        Document filtro = new Document("nome", nome);
+
+        // Deleta o primeiro que encontrar
+        var resultado = collection.deleteOne(filtro);
+
+        if (resultado.getDeletedCount() > 0) {
+            System.out.println("🗑️ Lead '" + nome + "' removido com sucesso!");
+        } else {
+            System.out.println("⚠️ Nenhum lead encontrado com o nome: " + nome);
+        }
+    }
+    public void exportarParaCSV() {
+        String nomeArquivo = "leads_exportados.csv";
+
+        try (FileWriter fw = new FileWriter(nomeArquivo);
+             PrintWriter pw = new PrintWriter(fw)) {
+
+            // Cabeçalho do Excel
+            pw.println("Nome;Destino;Data");
+
+            for (Document doc : collection.find()) {
+                pw.println(doc.getString("nome") + ";" +
+                        doc.getString("destino") + ";" +
+                        doc.get("data_cadastro"));
+            }
+
+            System.out.println("📄 Arquivo '" + nomeArquivo + "' gerado com sucesso!");
+
+        } catch (Exception e) {
+            System.err.println("❌ Erro ao exportar: " + e.getMessage());
+        }
+    }
+
+    // Construtor: Ele faz a conexão quando cria o objeto LeadDAO
     public LeadDAO() {
         String uri = System.getenv("MONGODB_URI");
         if (uri != null) {

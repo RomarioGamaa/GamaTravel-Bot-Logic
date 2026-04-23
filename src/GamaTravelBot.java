@@ -15,12 +15,15 @@ public class GamaTravelBot {
             EbookProduct ebookTibet = new EbookProduct("Roteiro Secreto: Tibet", 47.00);
             int opcao = 0;
 
-            while (opcao != 4) {
+            // Mudando o while para 6, já que o 6 agora será o SAIR
+            while (opcao != 6) {
                 System.out.println("\n--- GAMA TRAVEL SISTEMA ---");
                 System.out.println("1. Comprar E-book (Vendas)");
                 System.out.println("2. Agendar Consultoria (Leads)");
-                System.out.println("3. Relatório de Leads (Admin)");
-                System.out.println("4. Sair");
+                System.out.println("3. Relatório de Leads (Nuvem)");
+                System.out.println("4. Excluir um Lead");         // Nova opção!
+                System.out.println("5. Exportar Leads (Excel)");   // Nova opção!
+                System.out.println("6. Sair");
                 System.out.print("Escolha: ");
 
                 try {
@@ -67,6 +70,25 @@ public class GamaTravelBot {
                     case 3:
                         System.out.println("\n=== RELATÓRIO DE LEADS (DIRETO DA NUVEM) ===");
                         dao.listarTodos();
+                        break;
+
+                    case 4:
+                        System.out.println("\n--- EXCLUSÃO DE LEAD ---");
+                        System.out.print("Digite o nome EXATO do lead que deseja excluir: ");
+                        String nomeParaDeletar = scanner.nextLine();
+
+                        // Pergunta de confirmação (Segurança é tudo!)
+                        System.out.print("Tem certeza que deseja deletar " + nomeParaDeletar + "? (sim/nao): ");
+                        if (scanner.nextLine().equalsIgnoreCase("sim")) {
+                            dao.deletarPorNome(nomeParaDeletar);
+                        } else {
+                            System.out.println("Operação cancelada.");
+                        }
+                        break;
+
+                    case 5:
+                        System.out.println("\n--- EXPORTANDO DADOS ---");
+                        dao.exportarParaCSV();
                         break;
                 }
             }
