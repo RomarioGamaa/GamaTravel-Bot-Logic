@@ -1,28 +1,18 @@
 import java.util.ArrayList;
 import java.util.Scanner;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 
 public class GamaTravelBot {
     public static void main(String[] args) {
-        // 1. O Java busca o link seguro que foi salvo no IntelliJ
-        String uri = System.getenv("MONGODB_URI");
-
-        // 2. Conectar usando essa variável
-        try (MongoClient mongoClient = MongoClients.create(uri)) {
-            MongoDatabase database = mongoClient.getDatabase("GamaTravelDB");
-            MongoCollection<Document> collection = database.getCollection("leads");
-
-            System.out.println("✅ [SISTEMA] Conectado com segurança via Variável de Ambiente!");
-
-            // --- INÍCIO DA LÓGICA DO BOT ---
+        // Colocamos o TRY logo no começo para proteger todo o programa
+        try {
+            // 1. Ferramentas
             Scanner scanner = new Scanner(System.in);
+            LeadDAO dao = new LeadDAO(); // O DAO faz a conexão ao ser criado
             ArrayList<Lead> listaDeLeads = new ArrayList<>();
-            EbookProduct ebookTibet = new EbookProduct("Roteiro Secreto: Tibet", 47.00);
 
+            // 2. Produtos
+            EbookProduct ebookTibet = new EbookProduct("Roteiro Secreto: Tibet", 47.00);
             int opcao = 0;
 
             while (opcao != 4) {
@@ -52,56 +42,41 @@ public class GamaTravelBot {
 
                     case 2:
                         System.out.println("\n>> Iniciando agendamento da GamaTravel...");
-                        String nome = "";
+                        String nomeInput = "";
 
-                        while (nome.trim().isEmpty()) {
+                        while (nomeInput.trim().isEmpty()) {
                             System.out.print("Qual o seu nome completo? ");
-                            nome = scanner.nextLine();
-                            if (nome.trim().isEmpty()) {
+                            nomeInput = scanner.nextLine();
+                            if (nomeInput.trim().isEmpty()) {
                                 System.out.println("⚠️ Erro: O nome não pode ficar em branco.");
                             }
                         }
 
                         System.out.print("Para qual destino você deseja orçar? ");
-                        String destino = scanner.nextLine();
-                        if (destino.trim().isEmpty()) { destino = "Destino não informado"; }
+                        String destinoInput = scanner.nextLine();
+                        if (destinoInput.trim().isEmpty()) {
+                            destinoInput = "Destino não informado";
+                        }
 
-                        // Salvando Localmente
-                        Lead novoLead = new Lead(nome, destino);
-                        listaDeLeads.add(novoLead);
+                        listaDeLeads.add(new Lead(nomeInput, destinoInput));
+                        dao.salvar(nomeInput, destinoInput);
 
-                        // ---ENVIANDO PARA O MONGODB ---
-                        Document docLead = new Document("nome", nome)
-                                .append("destino", destino)
-                                .append("data_cadastro", new java.util.Date());
-
-                        collection.insertOne(docLead);
-
-                        System.out.println("✅ [NUVEM] Dados salvos com sucesso no MongoDB!");
+                        System.out.println("✅ Lead cadastrado e salvo no MongoDB!");
                         break;
 
                     case 3:
                         System.out.println("\n=== RELATÓRIO DE LEADS (DIRETO DA NUVEM) ===");
-
-                        // O comando find() busca todos os documentos na coleção 'leads'
-                        // Usamos um loop para percorrer cada "Document" encontrado
-                        for (Document doc : collection.find()) {
-                            String nomeLead = doc.getString("nome");
-                            String destinoLead = doc.getString("destino");
-                            Object data = doc.get("data_cadastro");
-
-                            System.out.println("---------------------------");
-                            System.out.println("👤 Nome: " + nomeLead);
-                            System.out.println("📍 Destino: " + destinoLead);
-                            System.out.println("📅 Cadastrado em: " + data);
-                        }
-                        System.out.println("---------------------------");
+                        dao.listarTodos();
                         break;
                 }
             }
 
+            System.out.println("Encerrando o sistema... Até logo!");
+
         } catch (Exception e) {
-            System.err.println("\n❌ ERRO CRÍTICO: " + e.getMessage());
+            // Se o MongoDB falhar ou o IP mudar, o erro cai aqui
+            System.err.println("\n❌ ERRO CRÍTICO NO SISTEMA: " + e.getMessage());
+            e.printStackTrace(); // Ajuda a ver onde o erro aconteceu
         }
     }
 }
