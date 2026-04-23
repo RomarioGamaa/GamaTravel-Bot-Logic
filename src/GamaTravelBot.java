@@ -81,14 +81,21 @@ public class GamaTravelBot {
                         break;
 
                     case 3:
-                        System.out.println("\n=== RELATÓRIO DE LEADS PARA AGÊNCIA ===");
-                        if (listaDeLeads.isEmpty()) {
-                            System.out.println("Nenhum lead cadastrado nesta sessão.");
-                        } else {
-                            for (Lead l : listaDeLeads) {
-                                l.exibirDetalhes();
-                            }
+                        System.out.println("\n=== RELATÓRIO DE LEADS (DIRETO DA NUVEM) ===");
+
+                        // O comando find() busca todos os documentos na coleção 'leads'
+                        // Usamos um loop para percorrer cada "Document" encontrado
+                        for (Document doc : collection.find()) {
+                            String nomeLead = doc.getString("nome");
+                            String destinoLead = doc.getString("destino");
+                            Object data = doc.get("data_cadastro");
+
+                            System.out.println("---------------------------");
+                            System.out.println("👤 Nome: " + nomeLead);
+                            System.out.println("📍 Destino: " + destinoLead);
+                            System.out.println("📅 Cadastrado em: " + data);
                         }
+                        System.out.println("---------------------------");
                         break;
                 }
             }
