@@ -1,6 +1,7 @@
+package main.java.gamatravel;
+
 import java.util.ArrayList;
 import java.util.Scanner;
-import org.bson.Document;
 
 public class GamaTravelBot {
     public static void main(String[] args) {
@@ -21,7 +22,7 @@ public class GamaTravelBot {
                 System.out.println("1. Comprar E-book (Vendas)");
                 System.out.println("2. Agendar Consultoria (Leads)");
                 System.out.println("3. Relatório de Leads (Nuvem)");
-                System.out.println("4. Excluir um Lead");         // Nova opção!
+                System.out.println("4. Excluir um main.java.gamatravel.Lead");         // Nova opção!
                 System.out.println("5. Exportar Leads (Excel)");   // Nova opção!
                 System.out.println("6. Sair");
                 System.out.print("Escolha: ");
@@ -47,11 +48,16 @@ public class GamaTravelBot {
                         System.out.println("\n>> Iniciando agendamento da GamaTravel...");
                         String nomeInput = "";
 
-                        while (nomeInput.trim().isEmpty()) {
+                        while (true) {
                             System.out.print("Qual o seu nome completo? ");
                             nomeInput = scanner.nextLine();
+
                             if (nomeInput.trim().isEmpty()) {
                                 System.out.println("⚠️ Erro: O nome não pode ficar em branco.");
+                            } else if (!isApenasLetras(nomeInput)) {
+                                System.out.println("⚠️ Erro: Digite apenas letras e acentos. Números não são permitidos.");
+                            } else {
+                                break; // Se estiver tudo certo, sai do loop
                             }
                         }
 
@@ -64,7 +70,7 @@ public class GamaTravelBot {
                         listaDeLeads.add(new Lead(nomeInput, destinoInput));
                         dao.salvar(nomeInput, destinoInput);
 
-                        System.out.println("✅ Lead cadastrado e salvo no MongoDB!");
+                        System.out.println("✅ main.java.gamatravel.Lead cadastrado e salvo no MongoDB!");
                         break;
 
                     case 3:
@@ -77,7 +83,7 @@ public class GamaTravelBot {
                         System.out.print("Digite o nome EXATO do lead que deseja excluir: ");
                         String nomeParaDeletar = scanner.nextLine();
 
-                        // Pergunta de confirmação (Segurança é tudo!)
+                        // Pergunta de confirmação
                         System.out.print("Tem certeza que deseja deletar " + nomeParaDeletar + "? (sim/nao): ");
                         if (scanner.nextLine().equalsIgnoreCase("sim")) {
                             dao.deletarPorNome(nomeParaDeletar);
@@ -99,6 +105,11 @@ public class GamaTravelBot {
             // Se o MongoDB falhar ou o IP mudar, o erro cai aqui
             System.err.println("\n❌ ERRO CRÍTICO NO SISTEMA: " + e.getMessage());
             e.printStackTrace(); // Ajuda a ver onde o erro aconteceu
+
         }
+    }
+    public static boolean isApenasLetras(String texto) {
+        // Esse código (Regex) diz: Aceite de A-Z e caracteres acentuados
+        return texto.matches("^[A-Za-zÀ-ÖØ-öø-ÿ\\s]+$");
     }
 }

@@ -1,3 +1,5 @@
+package main.java.gamatravel;
+
 public class EbookProduct {
     private String titulo;
     private double preco;
