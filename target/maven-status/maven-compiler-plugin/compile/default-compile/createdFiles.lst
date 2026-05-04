@@ -1,4 +1,5 @@
 main\java\gamatravel\GamaTravelBot.class
 main\java\gamatravel\EbookProduct.class
 main\java\gamatravel\Lead.class
+main\java\gamatravel\Lead$LeadDAO.class
 main\java\gamatravel\LeadDAO.class

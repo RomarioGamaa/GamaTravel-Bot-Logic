@@ -9,7 +9,7 @@ public class GamaTravelBot {
         try {
             // 1. Ferramentas
             Scanner scanner = new Scanner(System.in);
-            LeadDAO dao = new LeadDAO(); // O DAO faz a conexão ao ser criado
+            Lead.LeadDAO dao = new Lead.LeadDAO(); // O DAO faz a conexão ao ser criado
             ArrayList<Lead> listaDeLeads = new ArrayList<>();
 
             // 2. Produtos

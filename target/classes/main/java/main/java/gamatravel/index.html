@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gama Travel - Cadastro</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background: #f4f4f4; }
+        .card { background: white; padding: 20px; border-radius: 8px; shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        input { display: block; margin: 10px 0; padding: 8px; width: 200px; }
+        button { background: #28a745; color: white; border: none; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>Agendar Consultoria</h2>
+    <input type="text" id="nome" placeholder="Seu nome completo">
+    <input type="text" id="destino" placeholder="Destino desejado">
+    <button id="btn-enviar" onclick="confirmar()">Enviar Solicitação</button>
+    <p id="mensagem" style="display:none; color: green; font-weight: bold;">✅ Solicitação enviada com sucesso!</p>
+</div>
+
+<script>
+    function confirmar() {
+        document.getElementById('mensagem').style.display = 'block';
+    }
+</script>
+</body>
+</html>
