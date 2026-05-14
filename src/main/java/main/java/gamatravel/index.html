@@ -21,7 +21,17 @@
 
 <script>
     function confirmar() {
+        const nome = document.getElementById('nome').value;
+        const destino = document.getElementById('destino').value;
+
+        if (!nome || !destino) {
+            alert('Por favor, preencha todos os campos!');
+            return;
+        }
+
         document.getElementById('mensagem').style.display = 'block';
+        document.getElementById('nome').value = '';
+        document.getElementById('destino').value = '';
     }
 </script>
 </body>
